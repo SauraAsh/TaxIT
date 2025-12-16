@@ -1,0 +1,132 @@
+.dashboard-page {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  display: flex;
+}
+
+.dashboard-main {
+  flex: 1;
+  margin-left: 280px;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-main.sidebar-closed {
+  margin-left: 80px;
+}
+
+.dashboard-content {
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Welcome Section */
+.welcome-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.welcome-text h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.user-name {
+  color: var(--color-primary);
+}
+
+.welcome-text p {
+  font-size: 1rem;
+  color: var(--color-text-light);
+}
+
+.welcome-stats {
+  display: flex;
+  gap: 1rem;
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(0, 139, 255, 0.1);
+  color: var(--color-primary);
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stat-badge.success {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.stat-badge svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Section Header Small */
+.section-header-small {
+  margin-bottom: 1.5rem;
+}
+
+.section-header-small h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.section-header-small p {
+  font-size: 0.95rem;
+  color: var(--color-text-light);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .dashboard-main {
+    margin-left: 0;
+  }
+
+  .dashboard-main.sidebar-closed {
+    margin-left: 0;
+  }
+
+  .welcome-section {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .welcome-stats {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-content {
+    padding: 1rem;
+  }
+
+  .welcome-section {
+    padding: 1.5rem;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.5rem;
+  }
+
+  .stat-badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+}
