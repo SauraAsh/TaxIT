@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const LoginNPWP = ({ onNavigate, alternativeOptions, onNavigateToSupport, onNavigateToForgotPassword }) => {
+const LoginNPWP = ({ onNavigate, alternativeOptions, onNavigateToSupport, onNavigateToForgotPassword, onLoginSuccess }) => {
   const [formData, setFormData] = useState({
     npwp: '',
     password: '',
@@ -22,10 +22,24 @@ const LoginNPWP = ({ onNavigate, alternativeOptions, onNavigateToSupport, onNavi
     e.preventDefault()
     setIsLoading(true)
     
+    // Simulasi delay untuk loading
     setTimeout(() => {
       setIsLoading(false)
-      console.log('Login NPWP data:', formData)
-      alert('Login berhasil! (Demo)')
+      
+      // Validasi kredensial
+      const validNPWP = '11.111.111.1-111.111'
+      const validPassword = '123123123123'
+      
+      if (formData.npwp === validNPWP && formData.password === validPassword) {
+        console.log('Login berhasil! NPWP:', formData.npwp)
+        alert('Login berhasil! Selamat datang di E-Pajak')
+        // Panggil callback untuk navigasi ke dashboard
+        if (onLoginSuccess) {
+          onLoginSuccess()
+        }
+      } else {
+        alert('NPWP atau password salah!\n\nGunakan:\nNPWP: 11.111.111.1-111.111\nPassword: 123123123123')
+      }
     }, 1500)
   }
 

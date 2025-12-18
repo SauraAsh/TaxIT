@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import './Sidebar.css'
 
-const Sidebar = ({ isOpen, onToggle }) => {
-  const [activeMenu, setActiveMenu] = useState('dashboard')
+const Sidebar = ({ isOpen, onToggle, onNavigate, activeView }) => {
+  const [activeMenu, setActiveMenu] = useState(activeView || 'dashboard')
   const [expandedMenu, setExpandedMenu] = useState(null)
 
   const menuItems = [
@@ -104,6 +104,16 @@ const Sidebar = ({ isOpen, onToggle }) => {
       setExpandedMenu(expandedMenu === item.id ? null : item.id)
     } else {
       setActiveMenu(item.id)
+      if (onNavigate) {
+        onNavigate(item.id)
+      }
+    }
+  }
+
+  const handleSubmenuClick = (parentId, subId) => {
+    setActiveMenu(subId)
+    if (onNavigate) {
+      onNavigate(parentId, subId)
     }
   }
 
@@ -114,7 +124,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
         <div className="sidebar-overlay" onClick={onToggle}></div>
       )}
 
-      <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
+      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <div className="sidebar-logo">
             <div className="logo-icon">
@@ -124,56 +134,42 @@ const Sidebar = ({ isOpen, onToggle }) => {
                 <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            {isOpen && (
-              <div className="logo-text">
-                <span className="logo-title">E-Pajak</span>
-                <span className="logo-subtitle">Dashboard</span>
-              </div>
-            )}
+            <div className="logo-text">
+              <span className="logo-title">E-Pajak</span>
+              <span className="logo-subtitle">Dashboard</span>
+            </div>
           </div>
-          <button className="sidebar-toggle" onClick={onToggle}>
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
         </div>
 
         <nav className="sidebar-nav">
-          {menuItems.map((item, index) => (
-            <div key={item.id} className="menu-item-wrapper" style={{ animationDelay: `${index * 0.05}s` }}>
+          {menuItems.map((item) => (
+            <div key={item.id} className="menu-item-wrapper">
               <button
                 className={`menu-item ${activeMenu === item.id ? 'active' : ''} ${expandedMenu === item.id ? 'expanded' : ''}`}
                 onClick={() => handleMenuClick(item)}
               >
                 <div className="menu-icon">{item.icon}</div>
-                {isOpen && (
-                  <>
-                    <span className="menu-label">{item.label}</span>
-                    {item.submenu && (
-                      <svg 
-                        className="menu-arrow" 
-                        viewBox="0 0 24 24" 
-                        fill="none"
-                        style={{ transform: expandedMenu === item.id ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                      >
-                        <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    )}
-                  </>
+                <span className="menu-label">{item.label}</span>
+                {item.submenu && (
+                  <svg 
+                    className="menu-arrow" 
+                    viewBox="0 0 24 24" 
+                    fill="none"
+                    style={{ transform: expandedMenu === item.id ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                  >
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 )}
               </button>
 
-              {/* Submenu - Staggered */}
-              {item.submenu && isOpen && (
+              {/* Submenu */}
+              {item.submenu && (
                 <div className={`submenu ${expandedMenu === item.id ? 'open' : ''}`}>
-                  {item.submenu.map((sub, subIndex) => (
+                  {item.submenu.map((sub) => (
                     <button
                       key={sub.id}
                       className={`submenu-item ${activeMenu === sub.id ? 'active' : ''}`}
-                      onClick={() => setActiveMenu(sub.id)}
-                      style={{ 
-                        transitionDelay: expandedMenu === item.id ? `${subIndex * 0.05}s` : '0s'
-                      }}
+                      onClick={() => handleSubmenuClick(item.id, sub.id)}
                     >
                       <span className="submenu-dot"></span>
                       {sub.label}
@@ -185,19 +181,17 @@ const Sidebar = ({ isOpen, onToggle }) => {
           ))}
         </nav>
 
-        {isOpen && (
-          <div className="sidebar-footer">
-            <div className="footer-info">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                <path d="M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              <span>Butuh bantuan?</span>
-            </div>
-            <a href="#support" className="footer-link">Hubungi Support</a>
+        <div className="sidebar-footer">
+          <div className="footer-info">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+              <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            <span>Butuh bantuan?</span>
           </div>
-        )}
+          <a href="#support" className="footer-link">Hubungi Support</a>
+        </div>
       </aside>
     </>
   )

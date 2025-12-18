@@ -4,7 +4,7 @@ import LoginNIK from '../components/LoginNIK'
 import RegisterNPWP from '../components/RegisterNPWP'
 import './LoginPage.css'
 
-const LoginPage = ({ onBack, onNavigateToSupport, onNavigateToForgotPassword, onNavigateToTerms }) => {
+const LoginPage = ({ onBack, onNavigateToSupport, onNavigateToForgotPassword, onNavigateToTerms, onLoginSuccess }) => {
   const [currentView, setCurrentView] = useState('npwp') // 'npwp', 'nik', 'register'
   const [slideDirection, setSlideDirection] = useState('') // 'left', 'right'
 
@@ -68,6 +68,7 @@ const LoginPage = ({ onBack, onNavigateToSupport, onNavigateToForgotPassword, on
             alternativeOptions={alternativeOptions}
             onNavigateToSupport={onNavigateToSupport}
             onNavigateToForgotPassword={onNavigateToForgotPassword}
+            onLoginSuccess={onLoginSuccess}
           />
         )}
         {currentView === 'nik' && (

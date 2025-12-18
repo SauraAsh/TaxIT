@@ -8,12 +8,7 @@
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
-}
-
-.sidebar.closed {
-  width: 80px;
 }
 
 .sidebar-overlay {
@@ -68,32 +63,9 @@
   color: var(--color-text-light);
 }
 
+/* Remove toggle button */
 .sidebar-toggle {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: none;
-  border: none;
-  color: var(--color-text-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sidebar-toggle:hover {
-  background-color: var(--bg-primary);
-  color: var(--color-primary);
-}
-
-.sidebar-toggle svg {
-  width: 20px;
-  height: 20px;
-}
-
-.sidebar.closed .sidebar-toggle svg {
-  transform: rotate(180deg);
+  display: none;
 }
 
 /* Sidebar Navigation */
@@ -112,21 +84,9 @@
   border-radius: 4px;
 }
 
-/* Menu Items - Staggered Animation */
+/* Menu Items */
 .menu-item-wrapper {
-  opacity: 0;
-  animation: slideInMenu 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes slideInMenu {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  margin-bottom: 0.25rem;
 }
 
 .menu-item {
@@ -143,7 +103,6 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-bottom: 0.25rem;
   text-align: left;
 }
 
@@ -153,7 +112,7 @@
 }
 
 .menu-item.active {
-  background-color: rgba(0, 139, 255, 0.1);
+  background-color: rgba(59, 130, 246, 0.1);
   color: var(--color-primary);
 }
 
@@ -182,12 +141,7 @@
   transition: transform 0.3s ease;
 }
 
-.sidebar.closed .menu-label,
-.sidebar.closed .menu-arrow {
-  display: none;
-}
-
-/* Submenu - Staggered */
+/* Submenu */
 .submenu {
   max-height: 0;
   overflow: hidden;
@@ -217,16 +171,6 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
-  opacity: 0;
-  transform: translateX(-10px);
-  animation: fadeInSubmenu 0.3s ease forwards;
-}
-
-@keyframes fadeInSubmenu {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
 }
 
 .submenu-item:hover {
@@ -235,7 +179,7 @@
 }
 
 .submenu-item.active {
-  background-color: rgba(0, 139, 255, 0.05);
+  background-color: rgba(59, 130, 246, 0.05);
   color: var(--color-primary);
 }
 
@@ -281,16 +225,18 @@
   font-size: 0.875rem;
   font-weight: 600;
   transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .footer-link:hover {
-  background-color: rgba(0, 139, 255, 0.1);
+  background-color: rgba(59, 130, 246, 0.15);
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
+/* Responsive - Mobile Only */
+@media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .sidebar.open {
@@ -303,5 +249,13 @@
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .sidebar.open ~ .sidebar-overlay {
+    opacity: 1;
+    pointer-events: all;
   }
 }
