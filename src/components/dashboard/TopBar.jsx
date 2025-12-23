@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './TopBar.css'
 
-const TopBar = ({ user, onLogout }) => {
+const TopBar = ({ user, onLogout, onMenuClick }) => {
   const [showNotif, setShowNotif] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
 
@@ -33,6 +33,13 @@ const TopBar = ({ user, onLogout }) => {
 
   return (
     <header className="topbar">
+      {/* Hamburger Menu Button - Mobile Only */}
+      <button className="hamburger-button" onClick={onMenuClick}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+
       <div className="topbar-left">
         <button className="search-trigger">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

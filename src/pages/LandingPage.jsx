@@ -247,7 +247,7 @@ const LandingPage = ({ onNavigateToLogin }) => {
         <div className="footer-container">
           <div className="footer-content">
             <div className="footer-section">
-              <h4 className="footer-title">E-Pajak</h4>
+              <h4 className="footer-title">TaxIT</h4>
               <p className="footer-text">
                 Portal resmi Direktorat Jenderal Pajak untuk kemudahan layanan perpajakan online
               </p>

@@ -24,7 +24,7 @@ const Navbar = ({ onLoginClick }) => {
             </svg>
           </div>
           <div className="logo-text">
-            <span className="logo-title">E-Pajak</span>
+            <span className="logo-title">TaxIT</span>
             <span className="logo-subtitle">Direktorat Jenderal Pajak</span>
           </div>
         </div>

@@ -363,6 +363,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1280px) {
+  .bento-grid {
+    gap: 1.25rem;
+  }
+}
+
 @media (max-width: 1024px) {
   .bento-item.large,
   .bento-item.medium,
@@ -371,23 +377,52 @@
     grid-row: span 1;
   }
 
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+
   .chart-bars {
     height: 150px;
+    gap: 0.75rem;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .bento-grid {
     gap: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .bento-item {
     padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .bento-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .bento-header h3 {
+    font-size: 1rem;
   }
 
   .deadline-info {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: row;
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .deadline-info svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .deadline-date {
+    font-size: 1.25rem;
+  }
+
+  .amount-display {
+    padding: 1.25rem;
   }
 
   .amount-value {
@@ -396,5 +431,114 @@
 
   .stat-number {
     font-size: 1.75rem;
+  }
+
+  .bento-icon-header {
+    width: 56px;
+    height: 56px;
+  }
+
+  .chart-container {
+    padding: 0.75rem;
+  }
+
+  .chart-bars {
+    height: 140px;
+  }
+}
+
+@media (max-width: 640px) {
+  .bento-grid {
+    gap: 0.875rem;
+  }
+
+  .bento-item {
+    padding: 1rem;
+  }
+
+  .bento-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .deadline-info {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .deadline-date {
+    font-size: 1.125rem;
+  }
+
+  .amount-value {
+    font-size: 1.375rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .tagihan-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .chart-bars {
+    height: 120px;
+    gap: 0.5rem;
+  }
+
+  .bento-cta {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bento-item {
+    padding: 0.875rem;
+  }
+
+  .bento-header h3 {
+    font-size: 0.95rem;
+  }
+
+  .deadline-info {
+    padding: 0.875rem;
+  }
+
+  .deadline-info svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .amount-display {
+    padding: 0.875rem;
+  }
+
+  .bento-icon-header {
+    width: 48px;
+    height: 48px;
+  }
+
+  .bento-icon-header svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .activity-item {
+    gap: 0.75rem;
+  }
+
+  .activity-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .activity-title {
+    font-size: 0.8rem;
   }
 }

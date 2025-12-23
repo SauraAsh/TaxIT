@@ -1,14 +1,24 @@
 import { useState } from 'react'
 import Sidebar from '../../components/dashboard/Sidebar'
+import AnimatedSidebar from '../../components/dashboard/AnimatedSidebar'
 import TopBar from '../../components/dashboard/TopBar'
 import BentoGrid from '../../components/dashboard/BentoGrid'
 import QuickActions from '../../components/dashboard/QuickActions'
 import EFiling from './efiling/EFiling'
+import EBilling from './ebilling/EBilling'
+import EBukpot from './ebukpot/EBukpot'
+import Profile from './profile/Profile'
+import Pengaturan from './pengaturan/Pengaturan'
+import Bantuan from './bantuan/Bantuan'
 import './Dashboard.css'
 
 const Dashboard = ({ onLogout }) => {
-  const [currentView, setCurrentView] = useState('dashboard') // 'dashboard', 'efiling', etc
-  const [efilingTab, setEfilingTab] = useState('efiling-new') // submenu state
+  const [currentView, setCurrentView] = useState('dashboard') // 'dashboard', 'efiling', 'ebilling', 'ebukpot', etc
+  const [efilingTab, setEfilingTab] = useState('efiling-new') // efiling submenu state
+  const [ebillingTab, setEbillingTab] = useState('ebilling-new') // ebilling submenu state
+  const [ebukpotTab, setEbukpotTab] = useState('upload') // ebukpot submenu state
+  const [sidebarOpen, setSidebarOpen] = useState(false) // mobile sidebar state
+  const [useAnimatedSidebar, setUseAnimatedSidebar] = useState(true) // toggle between normal and animated sidebar
   const [user] = useState({
     name: 'Chello Arta',
     npwp: '11.111.111.1-111.111',
@@ -19,27 +29,60 @@ const Dashboard = ({ onLogout }) => {
   // Handle navigation from sidebar
   const handleNavigation = (view, submenu) => {
     setCurrentView(view)
+    setSidebarOpen(false) // Close sidebar on mobile after navigation
     if (submenu) {
-      // Map submenu IDs to tab names
-      const tabMap = {
+      // Map submenu IDs to tab names for E-Filing
+      const efilingTabMap = {
         'efiling-new': 'baru',
         'efiling-draft': 'draft',
         'efiling-history': 'riwayat'
       }
-      setEfilingTab(tabMap[submenu] || 'baru')
+      // Map submenu IDs to tab names for E-Billing
+      const ebillingTabMap = {
+        'ebilling-new': 'baru',
+        'ebilling-check': 'cek',
+        'ebilling-history': 'riwayat'
+      }
+      // Map submenu IDs to tab names for E-Bukpot
+      const ebukpotTabMap = {
+        'ebukpot-upload': 'upload',
+        'ebukpot-list': 'list'
+      }
+      
+      if (efilingTabMap[submenu]) {
+        setEfilingTab(efilingTabMap[submenu])
+      } else if (ebillingTabMap[submenu]) {
+        setEbillingTab(ebillingTabMap[submenu])
+      } else if (ebukpotTabMap[submenu]) {
+        setEbukpotTab(ebukpotTabMap[submenu])
+      }
     }
   }
 
   return (
     <div className="dashboard-page">
-      <Sidebar 
-        isOpen={true}
-        onNavigate={handleNavigation}
-        activeView={currentView}
-      />
+      {useAnimatedSidebar ? (
+        <AnimatedSidebar 
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen(!sidebarOpen)}
+          onNavigate={handleNavigation}
+          activeView={currentView}
+        />
+      ) : (
+        <Sidebar 
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen(!sidebarOpen)}
+          onNavigate={handleNavigation}
+          activeView={currentView}
+        />
+      )}
       
       <div className="dashboard-main sidebar-open">
-        <TopBar user={user} onLogout={onLogout} />
+        <TopBar 
+          user={user} 
+          onLogout={onLogout}
+          onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+        />
         
         <div className="dashboard-content">
           {currentView === 'dashboard' && (
@@ -77,6 +120,11 @@ const Dashboard = ({ onLogout }) => {
           )}
 
           {currentView === 'efiling' && <EFiling initialTab={efilingTab} />}
+          {currentView === 'ebilling' && <EBilling initialTab={ebillingTab} />}
+          {currentView === 'ebukpot' && <EBukpot initialTab={ebukpotTab} />}
+          {currentView === 'profile' && <Profile />}
+          {currentView === 'pengaturan' && <Pengaturan />}
+          {currentView === 'help' && <Bantuan />}
         </div>
       </div>
     </div>

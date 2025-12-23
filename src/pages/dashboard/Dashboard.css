@@ -6,7 +6,7 @@
 
 .dashboard-main {
   flex: 1;
-  margin-left: 280px;
+  margin-left: 0;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -93,6 +93,12 @@
 }
 
 /* Responsive */
+@media (max-width: 1280px) {
+  .dashboard-content {
+    padding: 1.5rem;
+  }
+}
+
 @media (max-width: 1024px) {
   .dashboard-main {
     margin-left: 0;
@@ -110,23 +116,87 @@
   .welcome-stats {
     flex-wrap: wrap;
   }
+
+  .dashboard-content {
+    padding: 1.25rem;
+  }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .dashboard-content {
     padding: 1rem;
   }
 
   .welcome-section {
-    padding: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.75rem;
+  }
+
+  .welcome-text p {
+    font-size: 0.9rem;
+  }
+
+  .section-header-small h2 {
+    font-size: 1.25rem;
+  }
+
+  .section-header-small p {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-content {
+    padding: 0.875rem;
+  }
+
+  .welcome-section {
+    padding: 1rem;
+    border-radius: 12px;
   }
 
   .welcome-text h1 {
     font-size: 1.5rem;
   }
 
+  .welcome-text p {
+    font-size: 0.85rem;
+  }
+
   .stat-badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  .stat-badge svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-content {
+    padding: 0.75rem;
+  }
+
+  .welcome-section {
+    padding: 0.875rem;
+  }
+
+  .welcome-text h1 {
+    font-size: 1.25rem;
+  }
+
+  .welcome-text p {
     font-size: 0.8rem;
-    padding: 0.5rem 1rem;
+  }
+
+  .stat-badge {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.75rem;
   }
 }

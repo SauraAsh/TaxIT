@@ -1,9 +1,11 @@
-import { useState } from 'react'
-import './Sidebar.css'
+import { useState, useEffect, useRef } from 'react'
+import './AnimatedSidebar.css'
 
-const Sidebar = ({ isOpen, onToggle, onNavigate, activeView }) => {
+const AnimatedSidebar = ({ isOpen, onToggle, onNavigate, activeView }) => {
   const [activeMenu, setActiveMenu] = useState(activeView || 'dashboard')
   const [expandedMenu, setExpandedMenu] = useState(null)
+  const sidebarRef = useRef(null)
+  const overlayRef = useRef(null)
 
   const menuItems = [
     {
@@ -99,11 +101,16 @@ const Sidebar = ({ isOpen, onToggle, onNavigate, activeView }) => {
     }
   ]
 
+  useEffect(() => {
+    setActiveMenu(activeView || 'dashboard')
+  }, [activeView])
+
   const handleMenuClick = (item) => {
     if (item.submenu) {
       setExpandedMenu(expandedMenu === item.id ? null : item.id)
     } else {
       setActiveMenu(item.id)
+      setExpandedMenu(null) // Close all dropdowns when navigating
       if (onNavigate) {
         onNavigate(item.id)
       }
@@ -112,77 +119,127 @@ const Sidebar = ({ isOpen, onToggle, onNavigate, activeView }) => {
 
   const handleSubmenuClick = (parentId, subId) => {
     setActiveMenu(subId)
+    setExpandedMenu(null) // Close dropdown after selection
     if (onNavigate) {
       onNavigate(parentId, subId)
     }
   }
 
+  // Animate menu items on open (not on mount)
+  useEffect(() => {
+    if (!isOpen || !sidebarRef.current) return
+
+    const items = sidebarRef.current.querySelectorAll('.animated-menu-item-label')
+    const numbers = sidebarRef.current.querySelectorAll('.animated-menu-item[data-numbered]')
+    
+    // Reset
+    items.forEach(item => {
+      item.style.transform = 'translateY(140%) rotate(10deg)'
+      item.style.opacity = '0'
+    })
+
+    numbers.forEach(num => {
+      num.style.setProperty('--num-opacity', '0')
+    })
+
+    // Animate in after panel slides in - shorter delays
+    setTimeout(() => {
+      items.forEach((item, index) => {
+        setTimeout(() => {
+          item.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease'
+          item.style.transform = 'translateY(0) rotate(0)'
+          item.style.opacity = '1'
+        }, index * 60) // Reduced from 100ms to 60ms
+      })
+
+      numbers.forEach((num, index) => {
+        setTimeout(() => {
+          num.style.transition = '--num-opacity 0.4s ease'
+          num.style.setProperty('--num-opacity', '1')
+        }, (index + 1) * 60) // Reduced from 100ms to 60ms
+      })
+    }, 300) // Reduced from 400ms to 300ms
+  }, [isOpen])
+
   return (
     <>
-      {/* Overlay for mobile */}
+      {/* Overlay */}
       {isOpen && (
-        <div className="sidebar-overlay" onClick={onToggle}></div>
+        <div 
+          ref={overlayRef}
+          className="animated-sidebar-overlay" 
+          onClick={onToggle}
+        />
       )}
 
-      <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <div className="sidebar-logo">
-            <div className="logo-icon">
+      {/* Prelayers for staggered effect */}
+      <div className={`animated-prelayers ${isOpen ? 'open' : ''}`}>
+        <div className="animated-prelayer" style={{ backgroundColor: '#3b82f6' }} />
+        <div className="animated-prelayer" style={{ backgroundColor: '#2563eb' }} />
+        <div className="animated-prelayer" style={{ backgroundColor: '#1d4ed8' }} />
+      </div>
+
+      {/* Sidebar Panel */}
+      <aside 
+        ref={sidebarRef}
+        className={`animated-sidebar ${isOpen ? 'open' : ''}`}
+      >
+        {/* Header */}
+        <div className="animated-sidebar-header">
+          <div className="animated-logo">
+            <div className="animated-logo-icon">
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <div className="logo-text">
-              <span className="logo-title">TaxIT</span>
-              <span className="logo-subtitle">Dashboard</span>
+            <div className="animated-logo-text">
+              <span className="animated-logo-title">TaxIT</span>
+              <span className="animated-logo-subtitle">Dashboard</span>
             </div>
           </div>
         </div>
 
-        <nav className="sidebar-nav">
-          {menuItems.map((item) => (
-            <div key={item.id} className="menu-item-wrapper">
-              <button
-                className={`menu-item ${activeMenu === item.id ? 'active' : ''} ${expandedMenu === item.id ? 'expanded' : ''}`}
-                onClick={() => handleMenuClick(item)}
-              >
-                <div className="menu-icon">{item.icon}</div>
-                <span className="menu-label">{item.label}</span>
-                {item.submenu && (
-                  <svg 
-                    className="menu-arrow" 
-                    viewBox="0 0 24 24" 
-                    fill="none"
-                    style={{ transform: expandedMenu === item.id ? 'rotate(180deg)' : 'rotate(0deg)' }}
-                  >
-                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                )}
-              </button>
+        {/* Menu Items */}
+        <nav className="animated-sidebar-nav">
+          <ul className="animated-menu-list">
+            {menuItems.map((item, index) => (
+              <li key={item.id} className="animated-menu-item-wrapper">
+                <button
+                  className={`animated-menu-item ${activeMenu === item.id ? 'active' : ''}`}
+                  data-numbered={!item.submenu ? 'true' : undefined}
+                  data-index={index + 1}
+                  onClick={() => handleMenuClick(item)}
+                >
+                  <span className="animated-menu-item-label">
+                    {item.label}
+                  </span>
+                </button>
 
-              {/* Submenu */}
-              {item.submenu && (
-                <div className={`submenu ${expandedMenu === item.id ? 'open' : ''}`}>
-                  {item.submenu.map((sub) => (
-                    <button
-                      key={sub.id}
-                      className={`submenu-item ${activeMenu === sub.id ? 'active' : ''}`}
-                      onClick={() => handleSubmenuClick(item.id, sub.id)}
-                    >
-                      <span className="submenu-dot"></span>
-                      {sub.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                {/* Submenu */}
+                {item.submenu && (
+                  <div className={`animated-submenu ${expandedMenu === item.id ? 'open' : ''}`}>
+                    {item.submenu.map((sub) => (
+                      <button
+                        key={sub.id}
+                        className={`animated-submenu-item ${activeMenu === sub.id ? 'active' : ''}`}
+                        onClick={() => handleSubmenuClick(item.id, sub.id)}
+                      >
+                        <span className="animated-submenu-dot"></span>
+                        {sub.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
         </nav>
 
-        <div className="sidebar-footer">
-          <div className="footer-info">
+        {/* Footer */}
+        <div className="animated-sidebar-footer">
+          <div className="animated-footer-info">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
               <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -190,11 +247,11 @@ const Sidebar = ({ isOpen, onToggle, onNavigate, activeView }) => {
             </svg>
             <span>Butuh bantuan?</span>
           </div>
-          <a href="#support" className="footer-link">Hubungi Support</a>
+          <a href="#support" className="animated-footer-link">Hubungi Support</a>
         </div>
       </aside>
     </>
   )
 }
 
-export default Sidebar
+export default AnimatedSidebar
